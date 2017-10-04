@@ -1,40 +1,36 @@
-NORTH = 1
-EAST  = 2
-SOUTH = 3
-WEST  = 4
+NORTH = 0
+EAST  = 1
+SOUTH = 2
+WEST  = 3
+
+movements = { NORTH: (0,1),
+              EAST : (1,0),
+              SOUTH: (0,-1),
+              WEST : (-1,0) }
 
 class Robot(object):
     def __init__(self, direction = NORTH, startx = 0, starty = 0):
         self.bearing = direction
-        self.coordinates = (startx, starty)
+        self.x = startx
+        self.y = starty
+        self.actions = { 'L': self.turn_left,
+                         'R': self.turn_right,
+                         'A': self.advance }
+
+    @property
+    def coordinates(self):
+        return (self.x, self.y)
 
     def turn_right(self):
-        if self.bearing == WEST:
-            self.bearing = NORTH
-        else:
-            self.bearing += 1
+        self.bearing = (self.bearing + 1) % 4
 
     def turn_left(self):
-        if self.bearing == NORTH:
-            self.bearing = WEST
-        else:
-            self.bearing -= 1
+        self.bearing = (self.bearing - 1) % 4
 
     def advance(self):
-        if self.bearing == NORTH:
-            self.coordinates = (self.coordinates[0], self.coordinates[1] + 1)
-        if self.bearing == SOUTH:
-            self.coordinates = (self.coordinates[0], self.coordinates[1] - 1)
-        if self.bearing == EAST:
-            self.coordinates = (self.coordinates[0] + 1, self.coordinates[1])
-        if self.bearing == WEST:
-            self.coordinates = (self.coordinates[0] - 1, self.coordinates[1])
+        self.x += movements[self.bearing][0]
+        self.y += movements[self.bearing][1]
 
-    def simulate(self, actions):
-        for i in actions:
-            if i == 'L':
-                self.turn_left()
-            if i == 'R':
-                self.turn_right()
-            if i == 'A':
-                self.advance()
+    def simulate(self, str):
+        for i in str:
+            self.actions[i]()
