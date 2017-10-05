@@ -11,8 +11,7 @@ movements = { NORTH: (0,1),
 class Robot(object):
     def __init__(self, direction = NORTH, startx = 0, starty = 0):
         self.bearing = direction
-        self.x = startx
-        self.y = starty
+        self.x, self.y = startx, starty
         self.actions = { 'L': self.turn_left,
                          'R': self.turn_right,
                          'A': self.advance }
