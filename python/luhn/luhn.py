@@ -3,10 +3,8 @@ class Luhn(object):
         self.num = string.replace(' ','')[::-1]
     def is_valid(self):
         s = 0
-        if len(self.num) > 1:
+        if (len(self.num) > 1) and self.num.isdigit():
             for i in range(1, len(self.num)+1):
-                if not self.num[i-1].isdigit():
-                    return False
                 t = int(self.num[i-1])
                 if i % 2 == 0:
                     t *= 2
